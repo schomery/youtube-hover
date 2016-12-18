@@ -33,5 +33,9 @@
   },
   "web_accessible_resources": [
     "data/loader.gif"
-  ]
+  ],
+  "options_ui": {
+    "page": "data/options/index.html",
+    "chrome_style": true
+  }
 }

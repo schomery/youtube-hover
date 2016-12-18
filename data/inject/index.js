@@ -1,6 +1,12 @@
 'use strict';
 
 var iframe;
+var config = {
+  'x-offset': 0,
+  'y-offset': 0,
+  'delay': 100,
+  'width': 500
+};
 
 var youtube = {
   play: (id, x = 0, y = 0) => {
@@ -8,16 +14,18 @@ var youtube = {
       return;
     }
     iframe = document.createElement('iframe');
-    iframe.setAttribute('width', 500);
-    iframe.setAttribute('height', 500 * 180 / 320);
-    //iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
+    iframe.setAttribute('width', config.width);
+    iframe.setAttribute('height', config.width * 180 / 320);
+    iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
     iframe.setAttribute('style', `
       left: ${x}px;
       top: ${y}px;
     `);
     iframe.setAttribute('class', 'ihvyoutube');
-    document.body.appendChild(iframe);
-    window.setTimeout(() => iframe.style.opacity = 1, 0);
+    window.setTimeout(() => {
+      document.body.appendChild(iframe);
+      window.setTimeout(() => iframe.style.opacity = 1, 0);
+    }, config.delay);
   }
 };
 
@@ -33,8 +41,8 @@ document.addEventListener('mouseover', e => {
           let rect = link.getBoundingClientRect();
           youtube.play(
             id[1],
-            rect.left + document.body.scrollLeft + document.documentElement.scrollLeft + 0,
-            rect.top + rect.height + document.body.scrollTop + document.documentElement.scrollTop + 0
+            rect.left + document.body.scrollLeft + document.documentElement.scrollLeft + config['offset-x'],
+            rect.top + rect.height + document.body.scrollTop + document.documentElement.scrollTop + config['offset-y']
           );
         }
       }
@@ -47,3 +55,5 @@ document.addEventListener('click', () => {
     iframe = null;
   }
 });
+
+chrome.runtime.sendMessage('settings', (prefs) => config = prefs);
