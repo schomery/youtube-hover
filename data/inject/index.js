@@ -17,6 +17,7 @@ var youtube = {
     `);
     iframe.setAttribute('class', 'ihvyoutube');
     document.body.appendChild(iframe);
+    window.setTimeout(() => iframe.style.opacity = 1, 0);
   }
 };
 
