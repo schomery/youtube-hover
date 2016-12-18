@@ -17,7 +17,10 @@
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "exclude_matches": ["*://*.youtube.com/*"],
+    "exclude_matches": [
+      "*://*.youtube.com/*",
+      "*://youtu.be/"
+    ],
     "js": ["data/inject/index.js"],
     "css": ["data/inject/index.css"],
     "run_at": "document_start",

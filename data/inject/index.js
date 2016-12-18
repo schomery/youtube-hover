@@ -35,8 +35,11 @@ document.addEventListener('mouseover', e => {
     let link = target.closest('a');
     if (link) {
       let href = link.href;
-      if (href && href.indexOf('youtube.com/watch?v=') !== -1) {
-        let id = href.match(/v\=([^\&]+)/);
+      if (
+        href && href.indexOf('youtube.com/watch?v=') !== -1 ||
+        href && href.indexOf('//youtu.be/') !== -1
+      ) {
+        let id = href.match(/v\=([^\&]+)/) || href.match(/\.be\/([^\&]+)/);
         if (id && id.length) {
           let rect = link.getBoundingClientRect();
           youtube.play(
