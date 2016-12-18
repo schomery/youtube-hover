@@ -1,0 +1,37 @@
+{
+  "name": "YouTube™ on Hover",
+  "short_name": "ihvyoutube",
+  "description": "View YouTube while hovering mouse over a YouTube link on any website",
+  "author": "Jeremy Schomery",
+  "version": "0.1.0",
+  "manifest_version": 2,
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "common.js"
+    ]
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "exclude_matches": ["*://*.youtube.com/*"],
+    "js": ["data/inject/index.js"],
+    "css": ["data/inject/index.css"],
+    "run_at": "document_start",
+    "all_frames": true,
+    "match_about_blank": true
+  }],
+  "homepage_url": "http://add0n.com/youtube-hover.html",
+  "icons": {
+    "16": "data/icons/16.png",
+    "32": "data/icons/32.png",
+    "48": "data/icons/48.png",
+    "128": "data/icons/128.png"
+  },
+  "web_accessible_resources": [
+    "data/loader.gif"
+  ]
+}
