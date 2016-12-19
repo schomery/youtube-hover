@@ -35,11 +35,25 @@ document.addEventListener('mouseover', e => {
     let link = target.closest('a');
     if (link) {
       let href = link.href;
+      if (!href) {
+        return;
+      }
       if (
-        href && href.indexOf('youtube.com/watch?v=') !== -1 ||
-        href && href.indexOf('//youtu.be/') !== -1
+        href.indexOf('youtube.com/attribution_link?a=') !== -1 ||
+        href.indexOf('youtube.com/watch?v=') !== -1 ||
+        href.indexOf('//youtu.be/') !== -1
       ) {
-        let id = href.match(/v\=([^\&]+)/) || href.match(/\.be\/([^\&]+)/);
+        let id;
+        if (href.indexOf('youtube.com/watch?v=') !== -1) {
+          id = href.match(/v\=([^\&]+)/);
+        }
+        else if (href.indexOf('//youtu.be/') !== -1) {
+          id = href.match(/\.be\/([^\&]+)/);
+        }
+        else if (href.indexOf('youtube.com/attribution_link?a=') !== -1) {
+          id = decodeURIComponent(href).match(/v\=([^\&]+)/);
+        }
+
         if (id && id.length) {
           let rect = link.getBoundingClientRect();
           youtube.play(
