@@ -12,9 +12,6 @@ var config = {
 
 var youtube = {
   play: (id, x = 0, y = 0) => {
-    if (iframe) {
-      return;
-    }
     iframe = document.createElement('iframe');
     iframe.setAttribute('width', config.width);
     iframe.setAttribute('height', config.width * 180 / 320);
@@ -45,7 +42,7 @@ document.addEventListener('mouseover', e => {
     let link = target.closest('a');
     if (link) {
       let href = link.href;
-      if (!href) {
+      if (!href || iframe) {
         return;
       }
       if (
