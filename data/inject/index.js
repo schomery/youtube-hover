@@ -4,9 +4,10 @@ var iframe;
 var config = {
   'x-offset': 0,
   'y-offset': 0,
-  'delay': 100,
+  'delay': 1000,
   'width': 500,
-  'mode': 0
+  'mode': 0,
+  'strike': true
 };
 
 var youtube = {
@@ -33,10 +34,8 @@ var youtube = {
       `);
     }
     iframe.setAttribute('class', 'ihvyoutube');
-    window.setTimeout(() => {
-      document.body.appendChild(iframe);
-      window.setTimeout(() => iframe.style.opacity = 1, 0);
-    }, 0);
+    document.body.appendChild(iframe);
+    window.setTimeout(() => iframe.style.opacity = 1, 0);
   }
 };
 
@@ -81,6 +80,10 @@ document.addEventListener('mouseover', e => {
                   document.documentElement.scrollHeight - rect.height - config.width * 180 / 320
                 )
               );
+              if (config.strike) {
+                [...document.querySelectorAll(`a[href="${href}"]`), link].
+                  forEach(l => l.style['text-decoration'] = 'line-through');
+              }
             }
           }, config.delay, link);
         }
@@ -95,4 +98,4 @@ document.addEventListener('click', () => {
   }
 });
 
-chrome.runtime.sendMessage('settings', (prefs) => config = prefs);
+chrome.runtime.sendMessage('settings', (prefs) => config = Object.assign(config, prefs));
