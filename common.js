@@ -1,7 +1,7 @@
 'use strict';
 
 chrome.runtime.onMessage.addListener((request, sender, response) => {
-  if (request === 'settings') {
+  if (request.cmd === 'settings') {
     chrome.storage.local.get({
       'offset-x': 0,
       'offset-y': 0,
@@ -11,6 +11,11 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
     }, prefs => response(prefs));
 
     return true;
+  }
+  else if (request.cmd === 'history') {
+    chrome.history.addUrl({
+      url: request.url
+    });
   }
 });
 

@@ -83,6 +83,10 @@ document.addEventListener('mouseover', e => {
               if (config.strike) {
                 [...document.querySelectorAll(`a[href="${href}"]`), link].
                   forEach(l => l.style['text-decoration'] = 'line-through');
+                chrome.runtime.sendMessage({
+                  url: href,
+                  cmd: 'history'
+                });
               }
             }
           }, config.delay, link);
@@ -98,4 +102,6 @@ document.addEventListener('click', () => {
   }
 });
 
-chrome.runtime.sendMessage('settings', (prefs) => config = Object.assign(config, prefs));
+chrome.runtime.sendMessage({
+  cmd: 'settings'
+}, (prefs) => config = Object.assign(config, prefs));
