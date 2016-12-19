@@ -25,7 +25,7 @@ function restore () {
   chrome.storage.local.get({
     'offset-x': 0,
     'offset-y': 0,
-    'delay': 100,
+    'delay': 2000,
     'width': 500,
     'mode': 0,
   }, prefs => {
