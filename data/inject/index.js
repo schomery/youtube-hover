@@ -73,11 +73,11 @@ document.addEventListener('mouseover', e => {
                 id[1],
                 Math.min(
                   rect.left + document.body.scrollLeft + document.documentElement.scrollLeft + config['offset-x'],
-                  document.documentElement.scrollWidth - rect.width - config.width
+                  document.documentElement.scrollWidth - config.width
                 ),
                 Math.min(
                   rect.top + rect.height + document.body.scrollTop + document.documentElement.scrollTop + config['offset-y'],
-                  document.documentElement.scrollHeight - rect.height - config.width * 180 / 320
+                  document.documentElement.scrollHeight - config.width * 180 / 320
                 )
               );
               if (config.strike) {
