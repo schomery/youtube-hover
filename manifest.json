@@ -24,8 +24,7 @@
     "js": ["data/inject/index.js"],
     "css": ["data/inject/index.css"],
     "run_at": "document_start",
-    "all_frames": true,
-    "match_about_blank": true
+    "all_frames": true
   }],
   "homepage_url": "http://add0n.com/youtube-hover.html",
   "icons": {

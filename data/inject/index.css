@@ -5,4 +5,5 @@
   position: absolute;
   opacity: 0.0;
   transition: visibility 0s, opacity 0.2s linear;
+  z-index: 2147483647;
 }
