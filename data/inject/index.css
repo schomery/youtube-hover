@@ -2,7 +2,6 @@
   border: solid 1px #dadada;
   box-shadow: 1px 1px 5px #dadada;
   background: #fff url('chrome-extension://__MSG_@@extension_id__/data/loader.gif') center center no-repeat;
-  position: absolute;
   opacity: 0.0;
   transition: visibility 0s, opacity 0.2s linear;
   z-index: 2147483647;

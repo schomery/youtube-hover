@@ -6,7 +6,8 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
       'offset-x': 0,
       'offset-y': 0,
       'width': 500,
-      'delay': 100
+      'delay': 100,
+      'mode': 0
     }, prefs => response(prefs));
 
     return true;
