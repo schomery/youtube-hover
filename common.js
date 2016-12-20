@@ -3,8 +3,10 @@
 chrome.runtime.onMessage.addListener((request, sender, response) => {
   if (request.cmd === 'settings') {
     chrome.storage.local.get({
-      'offset-x': 0,
-      'offset-y': 0,
+      'relative-x': 0,
+      'relative-y': 0,
+      'center-x': 0,
+      'center-y': 0,
       'width': 500,
       'delay': 1000,
       'mode': 0,

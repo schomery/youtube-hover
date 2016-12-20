@@ -5,6 +5,13 @@
   <style>
     input[type=number],
     select {
+      flex:  1;
+      width: 10px;
+    }
+    td:last-child {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 150px;
     }
   </style>
@@ -33,12 +40,16 @@
       </td>
     </tr>
     <tr>
-      <td>Player offset in "X" direction (in pixels)</td>
-      <td><input type="number" id="offset-x"></td>
+      <td>Player offset in "relative" mode</td>
+      <td>
+        <input type="number" id="relative-x">&nbsp;x&nbsp;<input type="number" id="relative-y">
+      </td>
     </tr>
     <tr>
-      <td>Player offset in "Y" direction (in pixels)</td>
-      <td><input type="number" id="offset-y"></td>
+      <td>Player offset in "center" mode</td>
+      <td>
+        <input type="number" id="center-x">&nbsp;x&nbsp;<input type="number" id="center-y">
+      </td>
     </tr>
     <tr>
       <td>To trigger preview, keep mouse over the link for (in milliseconds)</td>

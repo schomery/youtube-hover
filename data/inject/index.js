@@ -2,8 +2,10 @@
 
 var iframe;
 var config = {
-  'x-offset': 0,
-  'y-offset': 0,
+  'relative-x': 0,
+  'relative-y': 0,
+  'center-x': 0,
+  'center-y': 0,
   'delay': 1000,
   'width': 500,
   'mode': 0,
@@ -20,8 +22,8 @@ var youtube = {
     if (config.mode === 1) { // center of screen
       iframe.setAttribute('style', `
         position: fixed;
-        left: calc(50% - ${config.width / 2}px);
-        top: calc(50% - ${config.width * 180 / 320 / 2}px);
+        left: calc(50% - ${config.width / 2 - config['center-x']}px);
+        top: calc(50% - ${config.width * 180 / 320 / 2 - config['center-y']}px);
       `);
     }
     else {
@@ -70,11 +72,11 @@ document.addEventListener('mouseover', e => {
               youtube.play(
                 id[1],
                 Math.min(
-                  rect.left + document.body.scrollLeft + document.documentElement.scrollLeft + config['offset-x'],
+                  rect.left + document.body.scrollLeft + document.documentElement.scrollLeft + config['relative-x'],
                   document.documentElement.scrollWidth - config.width
                 ),
                 Math.min(
-                  rect.top + rect.height + document.body.scrollTop + document.documentElement.scrollTop + config['offset-y'],
+                  rect.top + rect.height + document.body.scrollTop + document.documentElement.scrollTop + config['relative-y'],
                   document.documentElement.scrollHeight - config.width * 180 / 320
                 )
               );
