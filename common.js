@@ -1,21 +1,6 @@
 'use strict';
 
 chrome.runtime.onMessage.addListener((request, sender, response) => {
-  if (request.cmd === 'settings') {
-    chrome.storage.local.get({
-      'relative-x': 0,
-      'relative-y': 0,
-      'center-x': 0,
-      'center-y': 0,
-      'width': 500,
-      'delay': 1000,
-      'mode': 0,
-      'strike': true,
-      'history': true
-    }, prefs => response(prefs));
-
-    return true;
-  }
   else if (request.cmd === 'history') {
     chrome.history.addUrl({
       url: request.url

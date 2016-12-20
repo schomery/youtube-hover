@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>YouTube™ on Hover Options</title>
+  <title>YouTube on Hover Options</title>
   <style>
+    body {
+      font-family: Roboto,sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+    }
     input[type=number],
     select {
-      flex:  1;
-      width: 10px;
+      flex: 1;
+      width: 30px;
+      min-width: 0;
     }
     td:last-child {
       display: flex;
-      justify-content: center;
-      align-items: center;
       width: 150px;
+      max-width: 150px;
     }
   </style>
 </head>
@@ -42,7 +47,7 @@
     <tr>
       <td>Player offset in "relative" mode</td>
       <td>
-        <input type="number" id="relative-x">&nbsp;x&nbsp;<input type="number" id="relative-y">
+        <input type="number" id="relative-x" size="5" maxlength="20">&nbsp;x&nbsp;<input type="number" id="relative-y">
       </td>
     </tr>
     <tr>

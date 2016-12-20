@@ -12,6 +12,12 @@ var config = {
   'strike': true,
   'history': true
 };
+chrome.storage.local.get(config, prefs => config = prefs);
+chrome.storage.onChanged.addListener(prefs => {
+  Object.keys(prefs).forEach(name => {
+    config[name] = prefs[name].newValue;
+  });
+});
 
 var youtube = {
   play: (id, x = 0, y = 0) => {
@@ -103,7 +109,3 @@ document.addEventListener('click', () => {
     iframe = null;
   }
 });
-
-chrome.runtime.sendMessage({
-  cmd: 'settings'
-}, (prefs) => config = Object.assign(config, prefs));
