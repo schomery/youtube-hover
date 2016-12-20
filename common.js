@@ -1,7 +1,7 @@
 'use strict';
 
-chrome.runtime.onMessage.addListener((request, sender, response) => {
-  else if (request.cmd === 'history') {
+chrome.runtime.onMessage.addListener(request => {
+  if (request.cmd === 'history') {
     chrome.history.addUrl({
       url: request.url
     });
