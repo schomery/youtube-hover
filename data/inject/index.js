@@ -7,7 +7,8 @@ var config = {
   'delay': 1000,
   'width': 500,
   'mode': 0,
-  'strike': true
+  'strike': true,
+  'history': true
 };
 
 var youtube = {
@@ -80,6 +81,8 @@ document.addEventListener('mouseover', e => {
               if (config.strike) {
                 [...document.querySelectorAll(`a[href="${href}"]`), link].
                   forEach(l => l.style['text-decoration'] = 'line-through');
+              }
+              if (config.history) {
                 chrome.runtime.sendMessage({
                   url: href,
                   cmd: 'history'
@@ -94,7 +97,7 @@ document.addEventListener('mouseover', e => {
 });
 document.addEventListener('click', () => {
   if (iframe) {
-    document.body.removeChild(iframe);
+    [...document.querySelectorAll('.ihvyoutube')].forEach(f => f.parentNode.removeChild(f));
     iframe = null;
   }
 });

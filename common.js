@@ -7,7 +7,9 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
       'offset-y': 0,
       'width': 500,
       'delay': 1000,
-      'mode': 0
+      'mode': 0,
+      'strike': true,
+      'history': true
     }, prefs => response(prefs));
 
     return true;

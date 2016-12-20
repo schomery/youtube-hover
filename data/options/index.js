@@ -7,6 +7,7 @@ function save () {
   let width = document.getElementById('width').value;
   let mode = document.getElementById('mode').selectedIndex;
   let strike = document.getElementById('strike').checked;
+  let history = document.getElementById('history').checked;
 
   chrome.storage.local.set({
     'offset-x': +x,
@@ -14,7 +15,8 @@ function save () {
     'width': +width,
     'delay': +delay,
     'mode': mode,
-    'strike': strike
+    'strike': strike,
+    'history': history
   }, () => {
     let status = document.getElementById('status');
     status.textContent = 'Options saved.';
@@ -30,7 +32,8 @@ function restore () {
     'delay': 1000,
     'width': 500,
     'mode': 0,
-    'strike': true
+    'strike': true,
+    'history': true
   }, prefs => {
     document.getElementById('offset-x').value = prefs['offset-x'];
     document.getElementById('offset-y').value = prefs['offset-y'];
@@ -38,6 +41,7 @@ function restore () {
     document.getElementById('width').value = prefs.width;
     document.getElementById('mode').selectedIndex = prefs.mode;
     document.getElementById('strike').checked = prefs.strike;
+    document.getElementById('history').checked = prefs.history;
   });
 }
 document.addEventListener('DOMContentLoaded', restore);
