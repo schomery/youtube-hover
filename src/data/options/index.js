@@ -10,6 +10,7 @@ function save () {
   let mode = document.getElementById('mode').selectedIndex;
   let strike = document.getElementById('strike').checked;
   let history = document.getElementById('history').checked;
+  let scroll = document.getElementById('scroll').checked;
 
   chrome.storage.local.set({
     'relative-x': +rx,
@@ -20,7 +21,8 @@ function save () {
     'delay': +delay,
     'mode': mode,
     'strike': strike,
-    'history': history
+    'history': history,
+    'scroll': scroll,
   }, () => {
     let status = document.getElementById('status');
     status.textContent = 'Options saved.';
@@ -40,7 +42,8 @@ function restore () {
     'width': 500,
     'mode': 0,
     'strike': true,
-    'history': true
+    'history': true,
+    'scroll': false
   }, prefs => {
     document.getElementById('relative-x').value = prefs['relative-x'];
     document.getElementById('relative-y').value = prefs['relative-y'];
@@ -51,6 +54,7 @@ function restore () {
     document.getElementById('mode').selectedIndex = prefs.mode;
     document.getElementById('strike').checked = prefs.strike;
     document.getElementById('history').checked = prefs.history;
+    document.getElementById('scroll').checked = prefs.scroll;
   });
 }
 document.addEventListener('DOMContentLoaded', restore);

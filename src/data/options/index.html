@@ -24,7 +24,7 @@
 <body>
   <table>
     <tr>
-      <td>Player width (in pixels)</td>
+      <td>YouTube player width (in pixels)</td>
       <td><input type="number" id="width"></td>
     </tr>
     <tr>
@@ -36,7 +36,7 @@
       <td><input type="checkbox" id="history"></td>
     </tr>
     <tr>
-      <td>Player positioning mode:</td>
+      <td>Player positioning mode</td>
       <td>
         <select id="mode">
           <option>Relative to the link</option>
@@ -45,19 +45,23 @@
       </td>
     </tr>
     <tr>
-      <td>Player offset in "relative" mode</td>
+      <td>Scroll to player in the "relative" mode</td>
+      <td><input type="checkbox" id="scroll"></td>
+    </tr>
+    <tr>
+      <td>Player offset in the "relative" mode</td>
       <td>
         <input type="number" id="relative-x" size="5" maxlength="20">&nbsp;x&nbsp;<input type="number" id="relative-y">
       </td>
     </tr>
     <tr>
-      <td>Player offset in "center" mode</td>
+      <td>Player offset in the "center" mode</td>
       <td>
         <input type="number" id="center-x">&nbsp;x&nbsp;<input type="number" id="center-y">
       </td>
     </tr>
     <tr>
-      <td>To trigger preview, keep mouse over the link for (in milliseconds)</td>
+      <td>Display the player if mouse is over a link for (in milliseconds)</td>
       <td><input type="number" id="delay"></td>
     </tr>
   </table>

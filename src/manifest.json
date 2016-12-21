@@ -21,7 +21,7 @@
     "matches": ["<all_urls>"],
     "exclude_matches": [
       "*://*.youtube.com/*",
-      "*://youtu.be/"
+      "*://youtu.be/*"
     ],
     "js": ["data/inject/index.js"],
     "css": ["data/inject/index.css"],

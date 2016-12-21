@@ -1,0 +1,12 @@
+.ihvyoutube {
+  border: solid 1px #dadada;
+  box-shadow: 1px 1px 5px #dadada;
+  background: #fff url('../loader.gif') center center no-repeat;
+  opacity: 0.0;
+  transition: visibility 0s, opacity 0.2s linear;
+  z-index: 2147483647;
+}
+.ihvyoutube[data-error=true] {
+  background-image: url('../error.svg');
+  background-size: 128px;
+}

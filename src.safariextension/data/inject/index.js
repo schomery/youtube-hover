@@ -48,10 +48,10 @@ var youtube = {
       `);
     }
     else {
-      let x1 = rect.left + document.body.scrollLeft +
-        document.documentElement.scrollLeft + config['relative-x'];
-      let y1 = rect.top + rect.height + document.body.scrollTop +
-        document.documentElement.scrollTop + config['relative-y'];
+      let x1 = Math.max(0, rect.left + document.body.scrollLeft +
+        document.documentElement.scrollLeft + config['relative-x']);
+      let y1 = Math.max(0, rect.top + rect.height + document.body.scrollTop +
+        document.documentElement.scrollTop + config['relative-y']);
       let x2 = x1 + config.width;
       let y2 = y1 + config.width * 180 / 320;
       let vw = document.documentElement.scrollWidth;

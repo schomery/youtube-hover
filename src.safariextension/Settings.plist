@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>DefaultValue</key>
+		<string>500</string>
+		<key>Key</key>
+		<string>width-to-number</string>
+		<key>Title</key>
+		<string>Player width (in pixels)</string>
+		<key>Type</key>
+		<string>TextField</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>true</string>
+		<key>Key</key>
+		<string>strike</string>
+		<key>Title</key>
+		<string>Draw a strike-through over YouTube links after preview</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>0</string>
+		<key>Key</key>
+		<string>mode-to-number</string>
+		<key>Secure</key>
+		<false/>
+		<key>Title</key>
+		<string>Player positioning mode:</string>
+		<key>Titles</key>
+		<array>
+			<string>Relative to the link</string>
+			<string>Center of the screen</string>
+		</array>
+		<key>Type</key>
+		<string>ListBox</string>
+		<key>Values</key>
+		<array>
+			<string>0</string>
+			<string>1</string>
+		</array>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>0</string>
+		<key>Key</key>
+		<string>relative-x-to-number</string>
+		<key>Title</key>
+		<string>Player horizontal offset in "relative" mode</string>
+		<key>Type</key>
+		<string>TextField</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>0</string>
+		<key>Key</key>
+		<string>relative-y-to-number</string>
+		<key>Title</key>
+		<string>Player vertical offset in "relative" mode</string>
+		<key>Type</key>
+		<string>TextField</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>0</string>
+		<key>Key</key>
+		<string>center-x-to-number</string>
+		<key>Title</key>
+		<string>Player horizontal offset in "center" mode</string>
+		<key>Type</key>
+		<string>TextField</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>0</string>
+		<key>Key</key>
+		<string>center-y-to-number</string>
+		<key>Title</key>
+		<string>Player vertical  offset in "center" mode</string>
+		<key>Type</key>
+		<string>TextField</string>
+	</dict>
+</array>
+</plist>
