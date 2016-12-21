@@ -57,22 +57,18 @@ var youtube = {
       let vw = document.documentElement.scrollWidth;
       let vh = document.documentElement.scrollHeight;
 
-      let style = '';
+      let left = x1;
+      let top = y1;
       if (x2 > vw - 10) {
-        style += `left: ${vw - config.width - 10}px;`;
-      }
-      else {
-        style += `left: ${x1}px;`;
+        left = vw - config.width - 10;
       }
       if (y2 > vh - 10) {
-        style += `top: ${vh - config.width * 180 / 320 - 10}px;`;
-      }
-      else {
-        style += `top: ${y1}px;`;
+        top = vh - config.width * 180 / 320 - 10;
       }
       iframe.setAttribute('style', `
         position: absolute;
-        ${style}
+        left: ${left}px;
+        top: ${top}px;
       `);
     }
     iframe.setAttribute('class', 'ihvyoutube');
