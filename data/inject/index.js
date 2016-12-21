@@ -20,7 +20,7 @@ chrome.storage.onChanged.addListener(prefs => {
 });
 
 var youtube = {
-  play: (id, x = 0, y = 0) => {
+  play: (id, rect) => {
     iframe = document.createElement('iframe');
     iframe.setAttribute('width', config.width);
     iframe.setAttribute('height', config.width * 180 / 320);
@@ -33,10 +33,31 @@ var youtube = {
       `);
     }
     else {
+      let x1 = rect.left + document.body.scrollLeft +
+        document.documentElement.scrollLeft + config['relative-x'];
+      let y1 = rect.top + rect.height + document.body.scrollTop +
+        document.documentElement.scrollTop + config['relative-y'];
+      let x2 = x1 + config.width;
+      let y2 = y1 + config.width * 180 / 320;
+      let vw = document.documentElement.scrollWidth;
+      let vh = document.documentElement.scrollHeight;
+
+      let style = '';
+      if (x2 > vw - 10) {
+        style += `left: ${vw - config.width - 10}px;`;
+      }
+      else {
+        style += `left: ${x1}px;`;
+      }
+      if (y2 > vh - 10) {
+        style += `top: ${vh - config.width * 180 / 320 - 10}px;`;
+      }
+      else {
+        style += `top: ${y1}px;`;
+      }
       iframe.setAttribute('style', `
         position: absolute;
-        left: ${x}px;
-        top: ${y}px;
+        ${style}
       `);
     }
     iframe.setAttribute('class', 'ihvyoutube');
@@ -75,17 +96,7 @@ document.addEventListener('mouseover', e => {
             let activeLink = [...document.querySelectorAll(':hover')].pop();
             if (link === activeLink) {
               let rect = link.getBoundingClientRect();
-              youtube.play(
-                id[1],
-                Math.min(
-                  rect.left + document.body.scrollLeft + document.documentElement.scrollLeft + config['relative-x'],
-                  document.documentElement.scrollWidth - config.width
-                ),
-                Math.min(
-                  rect.top + rect.height + document.body.scrollTop + document.documentElement.scrollTop + config['relative-y'],
-                  document.documentElement.scrollHeight - config.width * 180 / 320
-                )
-              );
+              youtube.play(id[1], rect, target);
               if (config.strike) {
                 [...document.querySelectorAll(`a[href="${href}"]`), link].
                   forEach(l => l.style['text-decoration'] = 'line-through');
