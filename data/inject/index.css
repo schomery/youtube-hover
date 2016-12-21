@@ -6,3 +6,7 @@
   transition: visibility 0s, opacity 0.2s linear;
   z-index: 2147483647;
 }
+.ihvyoutube[data-error=true] {
+  background-image: url('chrome-extension://__MSG_@@extension_id__/data/error.svg');
+  background-size: 128px;
+}

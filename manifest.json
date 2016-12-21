@@ -8,7 +8,8 @@
   "permissions": [
     "storage",
     "tabs",
-    "history"
+    "history",
+    "*://www.youtube.com/*"
   ],
   "background": {
     "persistent": false,
@@ -35,7 +36,8 @@
     "128": "data/icons/128.png"
   },
   "web_accessible_resources": [
-    "data/loader.gif"
+    "data/loader.gif",
+    "data/error.svg"
   ],
   "options_ui": {
     "page": "data/options/index.html",
