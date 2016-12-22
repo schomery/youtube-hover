@@ -63,6 +63,10 @@ var youtube = {
     iframe.setAttribute('width', config.width);
     iframe.setAttribute('height', config.width * 180 / 320);
     iframe.setAttribute('allowfullscreen', true);
+    // unload the gif loader when player is loaded
+    iframe.addEventListener('load', () => {
+      window.setTimeout(() => iframe.dataset.loaded = true, 10000);
+    });
 
     function play () {
       if (shared) {
