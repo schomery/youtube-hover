@@ -36,8 +36,8 @@
     "128": "data/icons/128.png"
   },
   "web_accessible_resources": [
-    "data/loader.gif",
-    "data/error.svg"
+    "data/*.gif",
+    "data/*.svg"
   ],
   "options_ui": {
     "page": "data/options/index.html",
