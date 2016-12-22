@@ -10,7 +10,10 @@ var config = {
   'width': 500,
   'mode': 0,
   'strike': true,
-  'history': true
+  'history': true,
+  'scroll': true,
+  'smooth': true,
+  'dark': false
 };
 chrome.storage.local.get(config, prefs => config = prefs);
 chrome.storage.onChanged.addListener(prefs => {
@@ -19,33 +22,73 @@ chrome.storage.onChanged.addListener(prefs => {
   });
 });
 
+var smoothScroll = (function () {
+  let timeLapsed = 0;
+  let id, sx, sy, dx, dy, callback;
+
+  let easingPattern = time => time < 0.5 ? 8 * time * time * time * time : 1 - 8 * (--time) * time * time * time;
+
+  function step () {
+    timeLapsed += 16;
+    let percentage = timeLapsed / 400;
+    if (percentage > 1) {
+      window.scrollTo(sx + dx, sy + dy);
+      return callback();
+    }
+    window.scrollTo(
+      Math.floor(sx + (dx * easingPattern(percentage))),
+      Math.floor(sy + (dy * easingPattern(percentage)))
+    );
+    id = window.setTimeout(step, 16);
+  }
+
+  return function (x, y, c) {
+    window.clearTimeout(id);
+    callback = c;
+    timeLapsed = 0;
+    sx = document.body.scrollLeft + document.documentElement.scrollLeft;
+    sy = document.body.scrollTop + document.documentElement.scrollTop;
+    dx = Math.max(0, x - sx);
+    dy = Math.max(0, y - sy);
+    if (dx === 0 && dy === 0) {
+      return c();
+    }
+    step();
+  };
+})();
+
 var youtube = {
   play: (id, rect, shared) => {
     iframe = document.createElement('iframe');
     iframe.setAttribute('width', config.width);
     iframe.setAttribute('height', config.width * 180 / 320);
-    if (shared) {
-      chrome.runtime.sendMessage({
-        cmd: 'find-id',
-        url: 'https://www.youtube.com/shared?ci=' + id
-      }, id => {
-        if (id) {
-          iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
-        }
-        else {
-          iframe.dataset.error = true;
-        }
-      });
+
+    function play () {
+      if (shared) {
+        chrome.runtime.sendMessage({
+          cmd: 'find-id',
+          url: 'https://www.youtube.com/shared?ci=' + id
+        }, id => {
+          if (id) {
+            iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
+          }
+          else {
+            iframe.dataset.error = true;
+          }
+        });
+      }
+      else {
+        iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
+      }
     }
-    else {
-      iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
-    }
+
     if (config.mode === 1) { // center of screen
       iframe.setAttribute('style', `
         position: fixed;
         left: calc(50% - ${config.width / 2 - config['center-x']}px);
         top: calc(50% - ${config.width * 180 / 320 / 2 - config['center-y']}px);
       `);
+      play();
     }
     else {
       let x1 = Math.max(0, rect.left + document.body.scrollLeft +
@@ -65,18 +108,41 @@ var youtube = {
       if (y2 > vh - 10) {
         top = vh - config.width * 180 / 320 - 10;
       }
+      if (config.scroll) {
+        let x = Math.max(
+          document.body.scrollLeft,
+          left + config.width - document.documentElement.clientWidth + 10
+        );
+        let y = Math.max(
+          document.body.scrollTop,
+          top + config.width * 180 / 320 - document.documentElement.clientHeight + 10
+        );
+        if (config.smooth) {
+          smoothScroll(x, y, play);
+        }
+        else {
+          window.scrollTo(x, y);
+          play();
+        }
+      }
+      else {
+        play();
+      }
+
       iframe.setAttribute('style', `
         position: absolute;
         left: ${left}px;
         top: ${top}px;
       `);
+
     }
     iframe.setAttribute('class', 'ihvyoutube');
+    iframe.dataset.dark = config.dark;
     document.body.appendChild(iframe);
-    window.setTimeout(() => iframe.style.opacity = 1, 0);
   }
 };
 
+var timer;
 document.addEventListener('mouseover', e => {
   let target = e.target;
   if (target) {
@@ -109,7 +175,8 @@ document.addEventListener('mouseover', e => {
         }
 
         if (id && id.length) {
-          window.setTimeout((link) => {
+          window.clearTimeout(timer);
+          timer = window.setTimeout((link) => {
             let activeLink = [...document.querySelectorAll(':hover')].pop();
             if (link === activeLink) {
               let rect = link.getBoundingClientRect();

@@ -62,6 +62,7 @@ var youtube = {
     iframe = document.createElement('iframe');
     iframe.setAttribute('width', config.width);
     iframe.setAttribute('height', config.width * 180 / 320);
+    iframe.setAttribute('allowfullscreen', true);
 
     function play () {
       if (shared) {

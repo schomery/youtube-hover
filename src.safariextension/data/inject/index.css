@@ -1,12 +1,15 @@
 .ihvyoutube {
   border: solid 1px #dadada;
   box-shadow: 1px 1px 5px #dadada;
-  background: #fff url('../loader.gif') center center no-repeat;
-  opacity: 0.0;
-  transition: visibility 0s, opacity 0.2s linear;
+  background: #fff url('../loader-black.gif') center center no-repeat;
   z-index: 2147483647;
 }
 .ihvyoutube[data-error=true] {
   background-image: url('../error.svg');
   background-size: 128px;
+}
+.ihvyoutube[data-dark=true] {
+  box-shadow: 0 0 0 90000px rgba(0, 0, 0, 0.8);
+  border:  none;
+  background: #000 url('../loader-white.gif') center center no-repeat;
 }
