@@ -65,7 +65,11 @@ var youtube = {
     iframe.setAttribute('allowfullscreen', true);
     // unload the gif loader when player is loaded
     iframe.addEventListener('load', () => {
-      window.setTimeout(() => iframe.dataset.loaded = true, 10000);
+      window.setTimeout(() => {
+        if (iframe) {
+          iframe.dataset.loaded = true;
+        }
+      }, 10000);
     });
 
     function play () {
