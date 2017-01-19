@@ -207,8 +207,8 @@ document.addEventListener('mouseover', e => {
     }
   }
 });
-document.addEventListener('click', () => {
-  if (iframe) {
+document.addEventListener('click', (e) => {
+  if (iframe && e.target.closest('.ihvyoutube') === null) {
     [...document.querySelectorAll('.ihvyoutube')].forEach(f => f.parentNode.removeChild(f));
     iframe = null;
   }

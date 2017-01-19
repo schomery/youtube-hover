@@ -3,6 +3,7 @@
   box-shadow: 1px 1px 5px #dadada;
   z-index: 2147483647;
   background: #000 center center no-repeat;
+  resize: both;
 }
 .ihvyoutube:not([data-loaded=true]) {
   background-image: url('chrome-extension://__MSG_@@extension_id__/data/loader.gif');
