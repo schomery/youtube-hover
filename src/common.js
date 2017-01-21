@@ -24,17 +24,20 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
   }
 });
 
-chrome.storage.local.get('version', (obj) => {
+// FAQs & Feedback
+chrome.storage.local.get('version', prefs => {
   let version = chrome.runtime.getManifest().version;
-  if (obj.version !== version) {
-    window.setTimeout(() => {
-      chrome.storage.local.set({version}, () => {
-        chrome.tabs.create({
-          url: 'http://add0n.com/youtube-hover.html?version=' +
-            version + '&type=' +
-            (obj.version ? ('upgrade&p=' + obj.version) : 'install')
-        });
+  let isFirefox = navigator.userAgent.indexOf('Firefox') !== -1;
+  if (isFirefox ? !prefs.version : prefs.version !== version) {
+    chrome.storage.local.set({version}, () => {
+      chrome.tabs.create({
+        url: 'http://add0n.com/youtube-hover.html?version=' + version +
+          '&type=' + (prefs.version ? ('upgrade&p=' + prefs.version) : 'install')
       });
-    }, 3000);
+    });
   }
 });
+(function () {
+  let {name, version} = chrome.runtime.getManifest();
+  chrome.runtime.setUninstallURL('http://add0n.com/feedback.html?name=' + name + '&version=' + version);
+})();

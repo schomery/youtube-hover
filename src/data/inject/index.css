@@ -4,9 +4,22 @@
   z-index: 2147483647;
   background: #000 center center no-repeat;
   resize: both;
+  overflow: hidden;
 }
+::-webkit-resizer {
+  border: 2px solid yellow;
+  background: blue;
+  box-shadow: 0 0 2px 5px red;
+  outline: 2px dashed green;
+
+  /*size does not work*/
+  display:block;
+  width: 150px !important;
+  height: 150px !important;
+}
+
 .ihvyoutube:not([data-loaded=true]) {
-  background-image: url('chrome-extension://__MSG_@@extension_id__/data/loader.gif');
+  background-image: url('moz-extension://__MSG_@@extension_id__/data/loader.gif'), url('chrome-extension://__MSG_@@extension_id__/data/loader.gif');
 }
 .ihvyoutube[data-dark=true] {
   box-shadow: 0 0 0 90000px rgba(0, 0, 0, 0.8);
@@ -15,6 +28,6 @@
 .ihvyoutube[data-dark=true]:not([data-loaded=true]) {
 }
 .ihvyoutube[data-error=true] {
-  background-image: url('chrome-extension://__MSG_@@extension_id__/data/error.svg');
+  background-image: url('moz-extension://__MSG_@@extension_id__/data/error.svg'), url('chrome-extension://__MSG_@@extension_id__/data/error.svg');
   background-size: 128px;
 }

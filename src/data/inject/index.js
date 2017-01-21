@@ -63,6 +63,7 @@ var youtube = {
     iframe.setAttribute('width', config.width);
     iframe.setAttribute('height', config.width * 180 / 320);
     iframe.setAttribute('allowfullscreen', true);
+
     // unload the gif loader when player is loaded
     iframe.addEventListener('load', () => {
       window.setTimeout(() => {
@@ -187,6 +188,9 @@ document.addEventListener('mouseover', e => {
           window.clearTimeout(timer);
           timer = window.setTimeout((link) => {
             let activeLink = [...document.querySelectorAll(':hover')].pop();
+            if (activeLink) {
+              activeLink = activeLink.closest('a');
+            }
             if (link === activeLink) {
               let rect = link.getBoundingClientRect();
               youtube.play(id[1], rect, shared);
