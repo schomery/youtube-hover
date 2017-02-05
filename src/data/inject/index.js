@@ -107,8 +107,14 @@ var youtube = {
         document.documentElement.scrollTop + config['relative-y']);
       let x2 = x1 + config.width;
       let y2 = y1 + config.width * 180 / 320;
-      let vw = document.documentElement.scrollWidth;
-      let vh = document.documentElement.scrollHeight;
+      let vw = Math.max(
+        document.documentElement.scrollWidth,
+        document.body.scrollWidth
+      );
+      let vh = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      );
 
       let left = x1;
       let top = y1;
@@ -144,7 +150,6 @@ var youtube = {
         left: ${left}px;
         top: ${top}px;
       `);
-
     }
     iframe.setAttribute('class', 'ihvyoutube');
     iframe.dataset.dark = config.dark;
