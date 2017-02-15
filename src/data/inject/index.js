@@ -158,64 +158,63 @@ var youtube = {
 };
 
 var timer;
-document.addEventListener('mouseover', e => {
-  let target = e.target;
-  if (target) {
-    let link = target.closest('a');
-    if (link) {
-      let href = link.href;
-      if (!href || iframe) {
-        return;
-      }
-      let shared = false;
-      if (
-        href.indexOf('youtube.com/shared') !== -1 ||
-        href.indexOf('youtube.com/attribution_link') !== -1 ||
-        href.indexOf('youtube.com/watch') !== -1 ||
-        href.indexOf('//youtu.be/') !== -1
-      ) {
-        let id;
-        if (href.indexOf('youtube.com/watch') !== -1) {
-          id = href.match(/v\=([^\&]+)/);
-        }
-        else if (href.indexOf('//youtu.be/') !== -1) {
-          id = href.match(/\.be\/([^\&]+)/);
-        }
-        else if (href.indexOf('youtube.com/attribution_link') !== -1) {
-          id = decodeURIComponent(href).match(/v\=([^\&]+)/);
-        }
-        else if (href.indexOf('youtube.com/shared') !== -1) {
-          shared = true;
-          id = href.match(/ci\=([^\&]+)/);
-        }
-
-        if (id && id.length) {
-          window.clearTimeout(timer);
-          timer = window.setTimeout((link) => {
-            let activeLink = [...document.querySelectorAll(':hover')].pop();
-            if (activeLink) {
-              activeLink = activeLink.closest('a');
-            }
-            if (link === activeLink) {
-              let rect = link.getBoundingClientRect();
-              youtube.play(id[1], rect, shared);
-              if (config.strike) {
-                [...document.querySelectorAll(`a[href="${href}"]`), link].
-                  forEach(l => l.style['text-decoration'] = 'line-through');
-              }
-              if (config.history) {
-                chrome.runtime.sendMessage({
-                  url: href,
-                  cmd: 'history'
-                });
-              }
-            }
-          }, config.delay, link);
-        }
-      }
-    }
+document.addEventListener('mouseover', ({target}) => {
+  if (timer) {
+    window.clearTimeout(timer);
+    timer = null;
   }
+  if (iframe || !target) {
+    return;
+  }
+  let link = target.closest('a');
+  if (!link) {
+    return;
+  }
+  let href = link.href;
+  if (
+    !href ||
+    href.indexOf('youtube.com/shared') === -1 &&
+    href.indexOf('youtube.com/attribution_link') === -1 &&
+    href.indexOf('youtube.com/watch') === -1 &&
+    href.indexOf('//youtu.be/') === -1
+  ) {
+    return;
+  }
+  let id;
+  let shared = false;
+  if (href.indexOf('youtube.com/watch') !== -1) {
+    id = href.match(/v=([^&]+)/);
+  }
+  else if (href.indexOf('//youtu.be/') !== -1) {
+    id = href.match(/\.be\/([^&]+)/);
+  }
+  else if (href.indexOf('youtube.com/attribution_link') !== -1) {
+    id = decodeURIComponent(href).match(/v=([^&]+)/);
+  }
+  else if (href.indexOf('youtube.com/shared') !== -1) {
+    shared = true;
+    id = href.match(/ci=([^&]+)/);
+  }
+  if (!id) {
+    return;
+  }
+  timer = window.setTimeout(() => {
+    timer = null;
+    let rect = link.getBoundingClientRect();
+    youtube.play(id[1], rect, shared);
+    if (config.strike) {
+      [...document.querySelectorAll(`a[href="${href}"]`), link].
+        forEach(l => l.style['text-decoration'] = 'line-through');
+    }
+    if (config.history) {
+      chrome.runtime.sendMessage({
+        url: href,
+        cmd: 'history'
+      });
+    }
+  }, config.delay);
 });
+
 document.addEventListener('click', (e) => {
   if (iframe && e.target.closest('.ihvyoutube') === null) {
     [...document.querySelectorAll('.ihvyoutube')].forEach(f => f.parentNode.removeChild(f));
