@@ -59,6 +59,9 @@ var smoothScroll = (function () {
 
 var youtube = {
   play: (id, rect, shared) => {
+    // cleaning id; https://github.com/schomery/youtube-hover/issues/12
+    id = id.split('&')[0].split('?')[0];
+    //
     iframe = document.createElement('iframe');
     iframe.setAttribute('width', config.width);
     iframe.setAttribute('height', config.width * 180 / 320);
