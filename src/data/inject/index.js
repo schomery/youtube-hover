@@ -159,6 +159,9 @@ var youtube = {
 
 var timer;
 document.addEventListener('mouseover', e => {
+  if (timer) {
+    timer = window.clearTimeout(timer);
+  }
   let target = e.target;
   if (target) {
     let link = target.closest('a');
@@ -190,25 +193,18 @@ document.addEventListener('mouseover', e => {
         }
 
         if (id && id.length) {
-          window.clearTimeout(timer);
           timer = window.setTimeout((link) => {
-            let activeLink = [...document.querySelectorAll(':hover')].pop();
-            if (activeLink) {
-              activeLink = activeLink.closest('a');
+            let rect = link.getBoundingClientRect();
+            youtube.play(id[1], rect, shared);
+            if (config.strike) {
+              [...document.querySelectorAll(`a[href="${href}"]`), link].
+                forEach(l => l.style['text-decoration'] = 'line-through');
             }
-            if (link === activeLink) {
-              let rect = link.getBoundingClientRect();
-              youtube.play(id[1], rect, shared);
-              if (config.strike) {
-                [...document.querySelectorAll(`a[href="${href}"]`), link].
-                  forEach(l => l.style['text-decoration'] = 'line-through');
-              }
-              if (config.history) {
-                chrome.runtime.sendMessage({
-                  url: href,
-                  cmd: 'history'
-                });
-              }
+            if (config.history) {
+              chrome.runtime.sendMessage({
+                url: href,
+                cmd: 'history'
+              });
             }
           }, config.delay, link);
         }
