@@ -3,13 +3,13 @@
   "short_name": "ihvyoutube",
   "description": "View YouTube while hovering mouse over a YouTube link on any website",
   "author": "Jeremy Schomery",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "manifest_version": 2,
   "permissions": [
     "storage",
     "tabs",
     "history",
-    "*://www.youtube.com/*"
+    "*://*/*"
   ],
   "background": {
     "persistent": false,

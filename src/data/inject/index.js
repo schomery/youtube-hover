@@ -62,18 +62,18 @@ var youtube = {
     // cleaning id; https://github.com/schomery/youtube-hover/issues/12
     id = id.split('&')[0].split('?')[0];
     //
-    iframe = document.createElement('iframe');
-    iframe.setAttribute('width', config.width);
-    iframe.setAttribute('height', config.width * 180 / 320);
-    iframe.setAttribute('allowfullscreen', true);
-
-    // unload the gif loader when player is loaded
-    iframe.addEventListener('load', () => {
-      window.setTimeout(() => {
-        if (iframe) {
-          iframe.dataset.loaded = true;
-        }
-      }, 10000);
+    iframe = Object.assign(document.createElement('iframe'), {
+      width: config.width,
+      height:  config.width * 180 / 320,
+      allowfullscreen: true,
+      // unload the gif loader when player is loaded
+      onload: () => {
+        window.setTimeout(() => {
+          if (iframe) {
+            iframe.dataset.loaded = true;
+          }
+        }, 10000);
+      }
     });
 
     function play () {
@@ -83,7 +83,7 @@ var youtube = {
           url: 'https://www.youtube.com/shared?ci=' + id
         }, id => {
           if (id) {
-            iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
+            iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1`);
           }
           else {
             iframe.dataset.error = true;
@@ -91,7 +91,7 @@ var youtube = {
         });
       }
       else {
-        iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
+        iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1`);
       }
     }
 
@@ -219,5 +219,13 @@ document.addEventListener('click', (e) => {
   if (iframe && e.target.closest('.ihvyoutube') === null) {
     [...document.querySelectorAll('.ihvyoutube')].forEach(f => f.parentNode.removeChild(f));
     iframe = null;
+    e.preventDefault();
+  }
+});
+// keydown
+document.addEventListener('keydown', (e) => {
+  if (iframe && e.code === 'Escape') {
+    document.body.dispatchEvent(new Event('click', {bubbles: true}));
+    e.preventDefault();
   }
 });

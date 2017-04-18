@@ -22,6 +22,9 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
     req.send();
     return true;
   }
+  else if (request.cmd === 'is-mute') {
+    response(sender.tab.audible);
+  }
 });
 
 // FAQs & Feedback
