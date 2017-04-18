@@ -228,4 +228,9 @@ document.addEventListener('keydown', (e) => {
     document.body.dispatchEvent(new Event('click', {bubbles: true}));
     e.preventDefault();
   }
+  /*
+  else if (iframe && e.code === 'Space') {
+    iframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+  }
+  */
 });
