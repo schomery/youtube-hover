@@ -3,7 +3,7 @@
   "short_name": "ihvyoutube",
   "description": "View YouTube while hovering mouse over a YouTube link on any website",
   "author": "Jeremy Schomery",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "manifest_version": 2,
   "permissions": [
     "storage",
@@ -38,5 +38,10 @@
   "options_ui": {
     "page": "data/options/index.html",
     "chrome_style": true
+  },
+  "applications": {
+    "gecko": {
+      "id": "{732db00c-07ee-4763-a8c7-fd666803287e}"
+    }
   }
 }
