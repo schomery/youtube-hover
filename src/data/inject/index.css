@@ -19,7 +19,7 @@
 }
 
 .ihvyoutube:not([data-loaded=true]) {
-  background-image: url('moz-extension://__MSG_@@extension_id__/data/loader.gif'), url('chrome-extension://__MSG_@@extension_id__/data/loader.gif');
+  background-image: url('chrome-extension://__MSG_@@extension_id__/data/loader.gif');
 }
 .ihvyoutube[data-dark=true] {
   box-shadow: 0 0 0 90000px rgba(0, 0, 0, 0.8);
@@ -28,6 +28,16 @@
 .ihvyoutube[data-dark=true]:not([data-loaded=true]) {
 }
 .ihvyoutube[data-error=true] {
-  background-image: url('moz-extension://__MSG_@@extension_id__/data/error.svg'), url('chrome-extension://__MSG_@@extension_id__/data/error.svg');
+  background-image: url('chrome-extension://__MSG_@@extension_id__/data/error.svg');
   background-size: 128px;
+}
+
+@-moz-document url-prefix() {
+  .ihvyoutube:not([data-loaded=true]) {
+    background-image: url('moz-extension://__MSG_@@extension_id__/data/loader.gif');
+  }
+  .ihvyoutube[data-error=true] {
+    background-image: url('moz-extension://__MSG_@@extension_id__/data/error.svg');
+    background-size: 128px;
+  }
 }

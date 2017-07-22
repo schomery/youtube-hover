@@ -22,15 +22,17 @@ chrome.storage.onChanged.addListener(prefs => {
   });
 });
 
-var smoothScroll = (function () {
+var smoothScroll = (function() {
   let timeLapsed = 0;
   let id, sx, sy, dx, dy, callback;
 
-  let easingPattern = time => time < 0.5 ? 8 * time * time * time * time : 1 - 8 * (--time) * time * time * time;
+  const easingPattern = time => (time < 0.5) ?
+    (8 * time * time * time * time) :
+    (1 - 8 * (--time) * time * time * time);
 
-  function step () {
+  function step() {
     timeLapsed += 16;
-    let percentage = timeLapsed / 400;
+    const percentage = timeLapsed / 400;
     if (percentage > 1) {
       window.scrollTo(sx + dx, sy + dy);
       return callback();
@@ -42,7 +44,7 @@ var smoothScroll = (function () {
     id = window.setTimeout(step, 16);
   }
 
-  return function (x, y, c) {
+  return function(x, y, c) {
     window.clearTimeout(id);
     callback = c;
     timeLapsed = 0;
@@ -59,6 +61,12 @@ var smoothScroll = (function () {
 
 var youtube = {
   play: (id, rect, shared) => {
+    // https://github.com/schomery/youtube-hover/issues/15
+    let time = (id.split(/[?&]t=/)[1] || '0').split('&')[0];
+    const tmp = /(?:(\d+)h)?(?:(\d+)m)?(\d+)s/.exec(time);
+    if (tmp && tmp.length && tmp[3]) {
+      time = Number(tmp[3]) + Number(tmp[2] || 0) * 60 + Number(tmp[1] || 0) * 60 * 60;
+    }
     // cleaning id; https://github.com/schomery/youtube-hover/issues/12
     id = id.split('&')[0].split('?')[0];
     //
@@ -66,6 +74,7 @@ var youtube = {
       width: config.width,
       height:  config.width * 180 / 320,
       allowfullscreen: true,
+      sandbox: 'allow-scripts allow-same-origin',
       // unload the gif loader when player is loaded
       onload: () => {
         window.setTimeout(() => {
@@ -76,14 +85,14 @@ var youtube = {
       }
     });
 
-    function play () {
+    function play() {
       if (shared) {
         chrome.runtime.sendMessage({
           cmd: 'find-id',
           url: 'https://www.youtube.com/shared?ci=' + id
         }, id => {
           if (id) {
-            iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1`);
+            iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1&start=${time}`);
           }
           else {
             iframe.dataset.error = true;
@@ -91,7 +100,7 @@ var youtube = {
         });
       }
       else {
-        iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1`);
+        iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1&start=${time}`);
       }
     }
 
@@ -104,17 +113,17 @@ var youtube = {
       play();
     }
     else {
-      let x1 = Math.max(0, rect.left + document.body.scrollLeft +
+      const x1 = Math.max(0, rect.left + document.body.scrollLeft +
         document.documentElement.scrollLeft + config['relative-x']);
-      let y1 = Math.max(0, rect.top + rect.height + document.body.scrollTop +
+      const y1 = Math.max(0, rect.top + rect.height + document.body.scrollTop +
         document.documentElement.scrollTop + config['relative-y']);
-      let x2 = x1 + config.width;
-      let y2 = y1 + config.width * 180 / 320;
-      let vw = Math.max(
+      const x2 = x1 + config.width;
+      const y2 = y1 + config.width * 180 / 320;
+      const vw = Math.max(
         document.documentElement.scrollWidth,
         document.body.scrollWidth
       );
-      let vh = Math.max(
+      const vh = Math.max(
         document.documentElement.scrollHeight,
         document.body.scrollHeight
       );
@@ -128,11 +137,11 @@ var youtube = {
         top = vh - config.width * 180 / 320 - 10;
       }
       if (config.scroll) {
-        let x = Math.max(
+        const x = Math.max(
           document.body.scrollLeft,
           left + config.width - document.documentElement.clientWidth + 10
         );
-        let y = Math.max(
+        const y = Math.max(
           document.body.scrollTop,
           top + config.width * 180 / 320 - document.documentElement.clientHeight + 10
         );
@@ -165,11 +174,11 @@ document.addEventListener('mouseover', e => {
   if (timer) {
     timer = window.clearTimeout(timer);
   }
-  let target = e.target;
+  const target = e.target;
   if (target) {
-    let link = target.closest('a');
+    const link = target.closest('a');
     if (link) {
-      let href = link.href;
+      const href = link.href;
       if (!href || iframe) {
         return;
       }
@@ -182,26 +191,26 @@ document.addEventListener('mouseover', e => {
       ) {
         let id;
         if (href.indexOf('youtube.com/watch') !== -1) {
-          id = href.match(/v\=([^\&]+)/);
+          id = href.match(/v=(.+)/);
         }
         else if (href.indexOf('//youtu.be/') !== -1) {
-          id = href.match(/\.be\/([^\&]+)/);
+          id = href.match(/\.be\/(.+)/);
         }
         else if (href.indexOf('youtube.com/attribution_link') !== -1) {
-          id = decodeURIComponent(href).match(/v\=([^\&]+)/);
+          id = decodeURIComponent(href).match(/v=(.+)/);
         }
         else if (href.indexOf('youtube.com/shared') !== -1) {
           shared = true;
-          id = href.match(/ci\=([^\&]+)/);
+          id = href.match(/ci=(.+)/);
         }
 
         if (id && id.length) {
-          timer = window.setTimeout((link) => {
-            let rect = link.getBoundingClientRect();
+          timer = window.setTimeout(link => {
+            const rect = link.getBoundingClientRect();
             youtube.play(id[1], rect, shared);
             if (config.strike) {
-              [...document.querySelectorAll(`a[href="${href}"]`), link].
-                forEach(l => l.style['text-decoration'] = 'line-through');
+              [...document.querySelectorAll(`a[href="${href}"]`), link]
+                .forEach(l => l.style['text-decoration'] = 'line-through');
             }
             if (config.history) {
               chrome.runtime.sendMessage({
@@ -215,7 +224,7 @@ document.addEventListener('mouseover', e => {
     }
   }
 });
-document.addEventListener('click', (e) => {
+document.addEventListener('click', e => {
   if (iframe && e.target.closest('.ihvyoutube') === null) {
     [...document.querySelectorAll('.ihvyoutube')].forEach(f => f.parentNode.removeChild(f));
     iframe = null;
@@ -223,7 +232,7 @@ document.addEventListener('click', (e) => {
   }
 });
 // keydown
-document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', e => {
   if (iframe && e.code === 'Escape') {
     document.body.dispatchEvent(new Event('click', {bubbles: true}));
     e.preventDefault();
