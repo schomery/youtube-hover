@@ -13,9 +13,9 @@ var config = {
   'history': true,
   'scroll': true,
   'smooth': true,
-  'dark': false
+  'dark': false,
+  youtube: false
 };
-chrome.storage.local.get(config, prefs => config = prefs);
 chrome.storage.onChanged.addListener(prefs => {
   Object.keys(prefs).forEach(name => {
     config[name] = prefs[name].newValue;
@@ -170,7 +170,8 @@ var youtube = {
 };
 
 var timer;
-document.addEventListener('mouseover', e => {
+
+function mouseover(e) {
   if (timer) {
     timer = window.clearTimeout(timer);
   }
@@ -223,16 +224,16 @@ document.addEventListener('mouseover', e => {
       }
     }
   }
-});
-document.addEventListener('click', e => {
+}
+function click(e) {
+  window.clearTimeout(timer);
   if (iframe && e.target.closest('.ihvyoutube') === null) {
     [...document.querySelectorAll('.ihvyoutube')].forEach(f => f.parentNode.removeChild(f));
     iframe = null;
     e.preventDefault();
   }
-});
-// keydown
-document.addEventListener('keydown', e => {
+}
+function keydown(e) {
   if (iframe && e.code === 'Escape') {
     document.body.dispatchEvent(new Event('click', {bubbles: true}));
     e.preventDefault();
@@ -242,4 +243,14 @@ document.addEventListener('keydown', e => {
     iframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
   }
   */
+}
+
+chrome.storage.local.get(config, prefs => {
+  config = prefs;
+  if (document.location.hostname === 'www.youtube.com' && !config.youtube) {
+    return;
+  }
+  document.addEventListener('mouseover', mouseover);
+  document.addEventListener('click', click);
+  document.addEventListener('keydown', keydown);
 });
