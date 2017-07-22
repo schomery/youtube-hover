@@ -73,8 +73,7 @@ var youtube = {
     iframe = Object.assign(document.createElement('iframe'), {
       width: config.width,
       height:  config.width * 180 / 320,
-      allowfullscreen: true,
-      sandbox: 'allow-scripts allow-same-origin',
+      sandbox: 'allow-scripts allow-same-origin allow-presentation allow-popups',
       // unload the gif loader when player is loaded
       onload: () => {
         window.setTimeout(() => {
@@ -84,6 +83,7 @@ var youtube = {
         }, 10000);
       }
     });
+    iframe.setAttribute('allowFullScreen', '');
 
     function play() {
       if (shared) {
@@ -92,7 +92,7 @@ var youtube = {
           url: 'https://www.youtube.com/shared?ci=' + id
         }, id => {
           if (id) {
-            iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1&start=${time}`);
+            iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?fs=1&autoplay=1&enablejsapi=1&start=${time}`);
           }
           else {
             iframe.dataset.error = true;
@@ -100,7 +100,7 @@ var youtube = {
         });
       }
       else {
-        iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1&enablejsapi=1&start=${time}`);
+        iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?fs=1&autoplay=1&enablejsapi=1&start=${time}`);
       }
     }
 
@@ -248,6 +248,9 @@ function keydown(e) {
 chrome.storage.local.get(config, prefs => {
   config = prefs;
   if (document.location.hostname === 'www.youtube.com' && !config.youtube) {
+    return;
+  }
+  if (document.location.hostname === 'www.youtube.com' && window.top !== window) {
     return;
   }
   document.addEventListener('mouseover', mouseover);
