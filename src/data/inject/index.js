@@ -176,7 +176,7 @@ function mouseover(e) {
     timer = window.clearTimeout(timer);
   }
   const target = e.target;
-  if (target) {
+  if (target && target.nodeType === 1) {
     const link = target.closest('a');
     if (link) {
       const href = link.href;
