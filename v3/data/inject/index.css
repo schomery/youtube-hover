@@ -1,0 +1,114 @@
+.ihvyoutube-container {
+  border: solid 1px #dadada;
+  box-shadow: 1px 1px 5px #dadada;
+  z-index: 2147483647;
+  background: #000 center center no-repeat;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.ihvyoutube-container iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  pointer-events: auto;
+}
+
+.ihvyoutube-container.dragging iframe {
+  pointer-events: none;
+  /* Disable during drag */
+}
+
+.ihvyoutube-move {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: move;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.ihvyoutube-move svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+}
+
+.ihvyoutube-resize {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: se-resize;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ihvyoutube-resize svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+}
+
+::-webkit-resizer {
+  border: 2px solid yellow;
+  background: blue;
+  box-shadow: 0 0 2px 5px red;
+  outline: 2px dashed green;
+  display: block;
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.ihvyoutube-container:not([data-loaded=true]) {
+  background-image: url('chrome-extension://__MSG_@@extension_id__/data/loader.gif');
+}
+
+.ihvyoutube-container[data-dark=true] {
+  box-shadow: 0 0 0 90000px rgba(0, 0, 0, 0.8);
+  border: none;
+}
+
+.ihvyoutube-container[data-error=true] {
+  background-image: url('chrome-extension://__MSG_@@extension_id__/data/error.svg');
+  background-size: 128px;
+}
+
+.ihvyoutube-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2147483647;
+
+  .move {
+    cursor: move;
+  }
+  .resize {
+    cursor: se-resize;
+  }
+}
+
+@-moz-document url-prefix() {
+  .ihvyoutube-container:not([data-loaded=true]) {
+    background-image: url('moz-extension://__MSG_@@extension_id__/data/loader.gif');
+  }
+
+  .ihvyoutube-container[data-error=true] {
+    background-image: url('moz-extension://__MSG_@@extension_id__/data/error.svg');
+    background-size: 128px;
+  }
+}

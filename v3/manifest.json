@@ -1,0 +1,43 @@
+{
+  "name": "YouTube™ on Hover Preview",
+  "description": "Watch YouTube videos instantly by hovering your mouse over any YouTube link on a webpage.",
+  "version": "0.3.0",
+  "manifest_version": 3,
+  "permissions": [
+    "storage"
+  ],
+  "optional_permissions": [
+    "history"
+  ],
+  "host_permissions": [
+    "*://www.youtube.com/*"
+  ],
+  "background": {
+    "service_worker": "worker.js",
+    "scripts": ["worker.js"]
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["data/inject/index.js"],
+    "css": ["data/inject/index.css"],
+    "run_at": "document_start",
+    "all_frames": true
+  }],
+  "homepage_url": "https://add0n.com/youtube-hover.html",
+  "icons": {
+    "16": "data/icons/16.png",
+    "32": "data/icons/32.png",
+    "48": "data/icons/48.png",
+    "64": "data/icons/64.png",
+    "128": "data/icons/128.png",
+    "256": "data/icons/256.png"
+  },
+  "web_accessible_resources": [{
+    "resources": ["data/loading.gif", "data/error.svg"],
+    "matches": ["<all_urls>"]
+  }],
+  "options_ui": {
+    "page": "data/options/index.html",
+    "open_in_tab": true
+  }
+}

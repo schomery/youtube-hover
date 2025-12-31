@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Options Page :: YouTube on Hover</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+</head>
+<body>
+  <div class="container">
+    <table>
+      <tr>
+        <td><label for="width">Width of the YouTube player (in pixels)</label></td>
+        <td><input type="number" id="width"></td>
+      </tr>
+      <tr>
+        <td><label for="strike">Strike through YouTube links once they've been previewed</label></td>
+        <td><input type="checkbox" id="strike"></td>
+      </tr>
+      <tr>
+        <td><label for="history">Add links you preview to your browsing history</label></td>
+        <td><input type="checkbox" id="history"></td>
+      </tr>
+      <tr>
+        <td><label for="dark">Switch on Night Mode while a video is playing</label></td>
+        <td><input type="checkbox" id="dark"></td>
+      </tr>
+      <tr>
+        <td><label for="mode">Player positioning mode</label></td>
+        <td>
+          <select id="mode">
+            <option>Relative to the link</option>
+            <option>Center of the screen</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="scroll">Scroll to player in the "relative" mode</label></td>
+        <td><input type="checkbox" id="scroll"></td>
+      </tr>
+      <tr>
+        <td><label for="smooth">Use smooth scrolling</label></td>
+        <td><input type="checkbox" id="smooth"></td>
+      <tr>
+        <td><label for="relative-x">Player offset in the "relative" mode</label></td>
+        <td>
+          <div class="coord-inputs">
+            <input type="number" id="relative-x" size="5" maxlength="20"> <span>x</span> <input type="number"
+              id="relative-y">
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="center-x">Player offset in the "center" mode</label></td>
+        <td>
+          <div class="coord-inputs">
+            <input type="number" id="center-x"> <span>x</span> <input type="number" id="center-y">
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="delay">Display the player after the mouse hovers over a link for (milliseconds)</label></td>
+        <td><input type="number" id="delay"></td>
+      </tr>
+      <tr>
+        <td><label for="origin">YouTube embed origin</label></td>
+        <td>
+          <select id="origin">
+            <option value="youtube.com">youtube.com</option>
+            <option value="youtube-nocookie.com">youtube-nocookie.com</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="youtube" style="opacity: 0.5;">Display the preview panel on youtube.com as well</label>
+          <div class="warning">This feature is no longer supported. YouTube now blocks iframe embeds on youtube.com for security reasons to prevent recursive embedding.</div>
+        </td>
+        <td><input type="checkbox" id="youtube" disabled></td>
+      </tr>
+    </table>
+    <div class="actions">
+      <button id="save">Save Options</button>
+      <span id="status"></span>
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+
+</html>
