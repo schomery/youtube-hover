@@ -171,7 +171,8 @@ const youtube = {
       }
     });
     iframe.setAttribute('allowFullScreen', '');
-    iframe.setAttribute('referrerpolicy', 'cross-origin-with-strict-origin');
+    // https://github.com/schomery/youtube-hover/issues/29
+    iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
     container.appendChild(iframe);
 
     function play() {

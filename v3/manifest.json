@@ -1,7 +1,7 @@
 {
   "name": "YouTube™ on Hover Preview",
   "description": "Watch YouTube videos instantly by hovering your mouse over any YouTube link on a webpage.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "manifest_version": 3,
   "permissions": [
     "storage"
@@ -21,7 +21,8 @@
     "js": ["data/inject/index.js"],
     "css": ["data/inject/index.css"],
     "run_at": "document_start",
-    "all_frames": true
+    "all_frames": true,
+    "match_origin_as_fallback": true
   }],
   "homepage_url": "https://add0n.com/youtube-hover.html",
   "icons": {
