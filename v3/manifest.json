@@ -1,7 +1,7 @@
 {
   "name": "YouTube™ on Hover Preview",
   "description": "Watch YouTube videos instantly by hovering your mouse over any YouTube link on a webpage.",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "manifest_version": 3,
   "permissions": [
     "storage"
@@ -34,7 +34,7 @@
     "256": "data/icons/256.png"
   },
   "web_accessible_resources": [{
-    "resources": ["data/loading.gif", "data/error.svg"],
+    "resources": ["data/loader.gif", "data/error.svg"],
     "matches": ["<all_urls>"]
   }],
   "options_ui": {
@@ -44,7 +44,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "{732db00c-07ee-4763-a8c7-fd666803287e}",
-      "strict_min_version": "128.0"
+      "strict_min_version": "148.0"
     },
     "data_collection_permissions": {
       "required": ["none"]

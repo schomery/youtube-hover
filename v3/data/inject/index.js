@@ -2,6 +2,11 @@
 
 let iframe;
 let container;
+// some pages wipe or replace document.body which detaches the player;
+// once detected, attach to document.documentElement for the rest of the page
+let root = null;
+const parent = () => root || document.body || document.documentElement;
+const attach = node => parent().appendChild(node);
 const config = {
   'relative-x': 0,
   'relative-y': 0,
@@ -10,6 +15,7 @@ const config = {
   'delay': 1000,
   'width': 500,
   'mode': 0,
+  'mute': true,
   'strike': true,
   'history': false,
   'scroll': true,
@@ -104,7 +110,7 @@ const youtube = {
 
       const overlay = document.createElement('div');
       overlay.classList.add('ihvyoutube-overlay', 'move');
-      document.body.appendChild(overlay);
+      attach(overlay);
 
       function onMouseMove(e) {
         container.style.left = (left + e.clientX - startX) + 'px';
@@ -138,7 +144,7 @@ const youtube = {
       const overlay = document.createElement('div');
       overlay.onclick = e => e.stopPropagation();
       overlay.classList.add('ihvyoutube-overlay', 'resize');
-      document.body.appendChild(overlay);
+      attach(overlay);
 
       function onMouseMove(e) {
         container.style.width = (startWidth + e.clientX - startX) + 'px';
@@ -177,6 +183,7 @@ const youtube = {
 
     function play() {
       const origin = config.origin || 'youtube.com';
+      const volume = `&mute=${config.mute ? 1 : 0}`;
 
       if (shared) {
         chrome.runtime.sendMessage({
@@ -184,7 +191,7 @@ const youtube = {
           url: 'https://www.youtube.com/shared?ci=' + id
         }, id => {
           if (id) {
-            const href = `https://www.${origin}/embed/${id}?fs=1&autoplay=1&enablejsapi=1&start=${time}`;
+            const href = `https://www.${origin}/embed/${id}?fs=1&autoplay=1&enablejsapi=1${volume}&start=${time}`;
             iframe.setAttribute('src', href);
           }
           else {
@@ -193,7 +200,7 @@ const youtube = {
         });
       }
       else {
-        iframe.setAttribute('src', `https://www.${origin}/embed/${id}?fs=1&autoplay=1&enablejsapi=1&start=${time}`);
+        iframe.setAttribute('src', `https://www.${origin}/embed/${id}?fs=1&autoplay=1&enablejsapi=1${volume}&start=${time}`);
       }
     }
 
@@ -261,11 +268,73 @@ const youtube = {
       `);
     }
     container.dataset.dark = config.dark;
-    document.body.appendChild(container);
+    attach(container);
+
+    const node = container;
+    window.setTimeout(() => {
+      // detached without user action (the extension sets container to null when closing itself)
+      if (container === node && !node.isConnected) {
+        root = document.documentElement;
+        root.appendChild(node);
+        console.log('YouTube Hover: player was detached from document.body; re-attached to document.documentElement');
+      }
+    }, 1000);
   }
 };
 
 let timer;
+
+// resolves Google/Bing redirect links to their target URLs (no network required)
+const resolve = href => {
+  const b64 = s => {
+    try {
+      return atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4));
+    }
+    catch (e) {
+      return '';
+    }
+  };
+  const dec = s => {
+    try {
+      return decodeURIComponent(s);
+    }
+    catch (e) {
+      return s;
+    }
+  };
+  if (/(^|\.)bing\.com\/ck\//.test(href)) {
+    const u = (href.match(/[?&]u=([^&]+)/) || [])[1];
+    if (u) {
+      const v = dec(u);
+      let t = b64(v);
+      if (!/^https?:/.test(t)) {
+        t = b64(v.replace(/^a[12]/, ''));
+      }
+      if (/^https?:/.test(t)) {
+        return t;
+      }
+    }
+  }
+  else if (/(^|\.)google\.[a-z.]+\/url\?/.test(href)) {
+    const q = (href.match(/[?&](?:q|uddg)=([^&]+)/) || [])[1];
+    if (q) {
+      const t = dec(q);
+      if (/^https?:/.test(t)) {
+        return t;
+      }
+    }
+  }
+  else if (/(^|\.)google\.[a-z.]+\/goto\?/.test(href)) {
+    const p = (href.match(/[?&]url=([^&]+)/) || [])[1];
+    if (p) {
+      const t = (b64(dec(p)).match(/https?:\/\/[\x21-\x7e]+/) || [])[0];
+      if (t) {
+        return t;
+      }
+    }
+  }
+  return null;
+};
 
 function mouseover(e) {
   if (timer) {
@@ -279,26 +348,27 @@ function mouseover(e) {
       if (!href || iframe) {
         return;
       }
+      const url = resolve(href) || href;
       let shared = false;
       if (
-        href.indexOf('youtube.com/shared') !== -1 ||
-        href.indexOf('youtube.com/attribution_link') !== -1 ||
-        href.indexOf('youtube.com/watch') !== -1 ||
-        href.indexOf('//youtu.be/') !== -1
+        url.indexOf('youtube.com/shared') !== -1 ||
+        url.indexOf('youtube.com/attribution_link') !== -1 ||
+        url.indexOf('youtube.com/watch') !== -1 ||
+        url.indexOf('//youtu.be/') !== -1
       ) {
         let id;
-        if (href.indexOf('youtube.com/watch') !== -1) {
-          id = href.match(/v=(.+)/);
+        if (url.indexOf('youtube.com/watch') !== -1) {
+          id = url.match(/v=(.+)/);
         }
-        else if (href.indexOf('//youtu.be/') !== -1) {
-          id = href.match(/\.be\/(.+)/);
+        else if (url.indexOf('//youtu.be/') !== -1) {
+          id = url.match(/\.be\/(.+)/);
         }
-        else if (href.indexOf('youtube.com/attribution_link') !== -1) {
-          id = decodeURIComponent(href).match(/v=(.+)/);
+        else if (url.indexOf('youtube.com/attribution_link') !== -1) {
+          id = decodeURIComponent(url).match(/v=(.+)/);
         }
-        else if (href.indexOf('youtube.com/shared') !== -1) {
+        else if (url.indexOf('youtube.com/shared') !== -1) {
           shared = true;
-          id = href.match(/ci=(.+)/);
+          id = url.match(/ci=(.+)/);
         }
 
         if (id && id.length) {
@@ -311,7 +381,7 @@ function mouseover(e) {
             }
             if (config.history) {
               chrome.runtime.sendMessage({
-                url: href,
+                url,
                 cmd: 'history'
               });
             }
@@ -328,7 +398,7 @@ function click(e) {
     return;
   }
   if (container && e.target.closest('.ihvyoutube-container') === null) {
-    [...document.querySelectorAll('.ihvyoutube-container')].forEach(f => f.parentNode.removeChild(f));
+    [...document.querySelectorAll('.ihvyoutube-container')].forEach(f => f.remove());
     container = null;
     iframe = null;
     e.preventDefault();

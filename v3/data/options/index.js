@@ -20,6 +20,7 @@ const restore = async () => {
     'delay': 1000,
     'width': 500,
     'mode': 0,
+    'mute': true,
     'strike': true,
     'history': false,
     'scroll': true,
@@ -39,6 +40,7 @@ const restore = async () => {
   document.getElementById('scroll').checked = prefs.scroll;
   document.getElementById('smooth').checked = prefs.smooth;
   document.getElementById('dark').checked = prefs.dark;
+  document.getElementById('mute').checked = prefs.mute;
   document.getElementById('origin').value = prefs.origin;
 };
 document.addEventListener('DOMContentLoaded', restore);
@@ -57,6 +59,7 @@ document.getElementById('save').onclick = async function save() {
     'scroll': document.getElementById('scroll').checked,
     'smooth': document.getElementById('smooth').checked,
     'dark': document.getElementById('dark').checked,
+    'mute': document.getElementById('mute').checked,
     'origin': document.getElementById('origin').value
   });
   await toast('Options saved');
